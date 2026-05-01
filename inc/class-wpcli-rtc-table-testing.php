@@ -16,7 +16,7 @@ use function PWCC\RtcTableTesting\get_table_schema;
  *
  * @since 1.0.0
  */
-class Create_Collaboration_Table extends WP_CLI_Command {
+class WPCLI_RTC_Table_Testing extends WP_CLI_Command {
 	/**
 	 * Create the collaboration table.
 	 *

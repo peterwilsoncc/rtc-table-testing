@@ -27,8 +27,8 @@ function bootstrap() {
 	require_once __DIR__ . '/class-wp-http-polling-collaboration-server.php';
 
 	if ( defined( 'WP_CLI' ) && \WP_CLI ) {
-		require_once __DIR__ . '/class-wpcli-command.php';
-		\WP_CLI::add_command( 'rtc-table-testing', WPCLI_Command\Create_Collaboration_Table::class );
+		require_once __DIR__ . '/class-wpcli-rtc-table-testing.php';
+		\WP_CLI::add_command( 'rtc-table-testing', WPCLI_Command\WPCLI_RTC_Table_Testing::class );
 	}
 
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_collaboration_endpoints' );
