@@ -5,7 +5,7 @@
  * @package           RtcTableTesting
  * @author            Peter Wilson
  * @copyright         YYYY Peter Wilson
- * @license           MIT
+ * @license           GPLv2
  *
  * @wordpress-plugin
  * Plugin Name: RTC Table Testing
@@ -15,7 +15,7 @@
  * Requires PHP: 8.0
  * Author: Peter Wilson
  * Author URI: https://peterwilson.cc
- * License: MIT
+ * License: GPLv2
  * Text Domain: rtc-table-testing
  */
 
