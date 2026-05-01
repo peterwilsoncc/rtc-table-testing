@@ -11,7 +11,7 @@
  * Plugin Name: RTC Table Testing
  * Description: RTC Table Testing
  * Version: 1.0.0
- * Requires at least: 6.6
+ * Requires at least: 7.0
  * Requires PHP: 8.0
  * Author: Peter Wilson
  * Author URI: https://peterwilson.cc
