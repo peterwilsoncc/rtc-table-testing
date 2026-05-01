@@ -34,6 +34,8 @@ Awareness uses the object-cache only if the site uses a persistent object cache 
 
 If a persistent object-cache is not available awareness is stored in the custom table.
 
+This is included in the [WordPress/WordPress-Develop#11599](https://github.com/WordPress/wordpress-develop/pull/11599/) pull request.
+
 = Addition of the new table =
 
 By default the plugin will attempt to create the new table on each time the WordPress REST API is loaded. This is included for practical reasons but not entirely recommended.
