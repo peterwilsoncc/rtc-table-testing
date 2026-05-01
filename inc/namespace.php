@@ -24,6 +24,7 @@ function bootstrap() {
 	}
 
 	require_once __DIR__ . '/class-wp-collaboration-table-storage.php';
+	require_once __DIR__ . '/class-wp-collaboration-table-storage-only.php';
 	require_once __DIR__ . '/class-wp-http-polling-collaboration-server.php';
 
 	if ( defined( 'WP_CLI' ) && \WP_CLI ) {
@@ -49,6 +50,14 @@ function bootstrap() {
  * Run on the `rest_api_init` action.
  */
 function register_collaboration_endpoints() {
+	if (
+		defined( 'RTC_TABLE_TESTING_TEST_CASE' ) &&
+		'table_storage_only' === RTC_TABLE_TESTING_TEST_CASE
+	) {
+		$controller = new WP_HTTP_Polling_Collaboration_Server( new WP_Collaboration_Table_Storage_Only() );
+		$controller->register_routes();
+		return;
+	}
 	$controller = new WP_HTTP_Polling_Collaboration_Server( new WP_Collaboration_Table_Storage() );
 	$controller->register_routes();
 }

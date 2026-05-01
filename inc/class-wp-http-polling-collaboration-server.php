@@ -5,6 +5,7 @@
  * @package WordPress
  * @since 7.0.0
  */
+
 namespace PWCC\RtcTableTesting;
 
 use WP_Error;
@@ -104,18 +105,18 @@ class WP_HTTP_Polling_Collaboration_Server {
 	 * Storage backend for collaboration updates.
 	 *
 	 * @since 7.0.0
-	 * @var WP_Collaboration_Table_Storage
+	 * @var WP_Collaboration_Table_Storage|WP_Collaboration_Table_Storage_Only
 	 */
-	private WP_Collaboration_Table_Storage $storage;
+	private $storage;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 7.0.0
 	 *
-	 * @param WP_Collaboration_Table_Storage $storage Storage backend for collaboration updates.
+	 * @param WP_Collaboration_Table_Storage|WP_Collaboration_Table_Storage_Only $storage Storage backend for collaboration updates.
 	 */
-	public function __construct( WP_Collaboration_Table_Storage $storage ) {
+	public function __construct( $storage ) {
 		$this->storage = $storage;
 	}
 
