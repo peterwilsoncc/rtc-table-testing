@@ -30,6 +30,12 @@ function bootstrap() {
 
 	add_action( 'init', __NAMESPACE__ . '\\register_collaboration_table', 5 );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\maybe_create_table', 5 );
+
+	add_action( 'wp_delete_old_collaboration_data', __NAMESPACE__ . '\\wp_delete_old_collaboration_data' );
+
+	if ( ! wp_next_scheduled( 'wp_delete_old_collaboration_data' ) ) {
+		wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'wp_delete_old_collaboration_data' );
+	}
 }
 
 /**
@@ -89,4 +95,44 @@ function maybe_create_table() {
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $schema );
+}
+
+/**
+ * Deletes stale collaboration data from the collaboration table.
+ *
+ * Removes non-awareness rows older than 7 days and awareness rows older
+ * than 60 seconds. Rows left behind by abandoned collaborative editing
+ * sessions are cleaned up to prevent unbounded table growth.
+ *
+ * @since 7.0.0
+ *
+ * @global \wpdb $wpdb WordPress database abstraction object.
+ */
+function wp_delete_old_collaboration_data(): void {
+	global $wpdb;
+
+	if ( ! wp_is_collaboration_enabled() ) {
+		/*
+		 * Collaboration was enabled in the past but has since been disabled.
+		 * Unschedule the cron job prior to clean up so this callback does not
+		 * continue to run.
+		 */
+		wp_clear_scheduled_hook( 'wp_delete_old_collaboration_data' );
+	}
+
+	// Clean up rows older than 7 days.
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM {$wpdb->collaboration} WHERE date_gmt < %s",
+			gmdate( 'Y-m-d H:i:s', time() - WEEK_IN_SECONDS )
+		)
+	);
+
+	// Clean up awareness rows older than 60 seconds.
+	$wpdb->query(
+		$wpdb->prepare(
+			"DELETE FROM {$wpdb->collaboration} WHERE type = 'awareness' AND date_gmt < %s",
+			gmdate( 'Y-m-d H:i:s', time() - 60 )
+		)
+	);
 }
