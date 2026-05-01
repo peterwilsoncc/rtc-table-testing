@@ -25,6 +25,9 @@
 		<!-- sanitize_url() was undprected in WordPress 5.9.0 -->
 		<exclude name="WordPress.WP.DeprecatedFunctions.sanitize_urlFound"/>
 
+		<!-- Plugin is for testing a core feature -->
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound"/>
+		<!-- This is the entire point -->
 		<exclude name="WordPress.DB.DirectDatabaseQuery"/>
 	</rule>
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
