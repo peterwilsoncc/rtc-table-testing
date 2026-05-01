@@ -61,13 +61,13 @@ function register_collaboration_table() {
 }
 
 /**
- * Create the collaboration table if it doesn't already exist.
- *
- * Runs on the `rest_api_init, 5` action. Prior to default endpoint registration.
+ * Get the SQL schema for the collaboration table.
  *
  * @global \wpdb $wpdb WordPress database abstraction object.
+ *
+ * @return string SQL schema for the collaboration table.
  */
-function maybe_create_table() {
+function get_table_schema() {
 	global $wpdb;
 	$charset_collate = $wpdb->get_charset_collate();
 
@@ -78,7 +78,7 @@ function maybe_create_table() {
 	 */
 	$max_index_length = 191;
 
-	$schema = "CREATE TABLE $wpdb->collaboration (
+	return "CREATE TABLE $wpdb->collaboration (
 		collaboration_id bigint(20) unsigned NOT NULL auto_increment,
 		room varchar($max_index_length) NOT NULL default '',
 		type varchar(32) NOT NULL default '',
@@ -92,7 +92,15 @@ function maybe_create_table() {
 		KEY room_type_date (room,type,date_gmt),
 		KEY date_gmt (date_gmt)
 	) $charset_collate;\n";
+}
 
+/**
+ * Create the collaboration table if it doesn't already exist.
+ *
+ * Runs on the `rest_api_init, 5` action. Prior to default endpoint registration.
+ */
+function maybe_create_table() {
+	$schema = get_table_schema();
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $schema );
 }
