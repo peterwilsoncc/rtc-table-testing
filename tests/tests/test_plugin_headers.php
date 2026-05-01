@@ -2,10 +2,10 @@
 /**
  * Test Plugin Readme and PHP Headers
  *
- * @package WpPluginTemplate
+ * @package RtcTableTesting
  */
 
-namespace PWCC\WpPluginTemplate\Tests;
+namespace PWCC\RtcTableTesting\Tests;
 
 use WP_UnitTestCase;
 

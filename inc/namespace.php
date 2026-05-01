@@ -1,11 +1,11 @@
 <?php
 /**
- * WP Plugin Template
+ * RTC Table Testing
  *
- * @package           WpPluginTemplate
+ * @package           RtcTableTesting
  */
 
-namespace PWCC\WpPluginTemplate;
+namespace PWCC\RtcTableTesting;
 
 const PLUGIN_VERSION = '1.0.0';
 

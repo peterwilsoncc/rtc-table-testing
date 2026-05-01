@@ -2,14 +2,14 @@
 /**
  * Test Plugin Versions match.
  *
- * @package WpPluginTemplate
+ * @package RtcTableTesting
  */
 
-namespace PWCC\WpPluginTemplate\Tests;
+namespace PWCC\RtcTableTesting\Tests;
 
 use WP_UnitTestCase;
 
-use const PWCC\WpPluginTemplate\PLUGIN_VERSION;
+use const PWCC\RtcTableTesting\PLUGIN_VERSION;
 
 /**
  * Test Plugin Readme and PHP Headers
