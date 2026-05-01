@@ -7,7 +7,6 @@
 
 namespace PWCC\RtcTableTesting\WPCLI_Command;
 
-use WP_CLI;
 use WP_CLI_Command;
 use function PWCC\RtcTableTesting\get_table_schema;
 

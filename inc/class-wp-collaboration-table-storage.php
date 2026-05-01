@@ -5,6 +5,7 @@
  * @package WordPress
  * @since 7.0.0
  */
+
 namespace PWCC\RtcTableTesting;
 
 use DateTimeZone;
