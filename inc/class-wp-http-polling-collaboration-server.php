@@ -242,7 +242,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return new WP_Error(
 				'rest_cannot_edit',
-				__( 'You do not have permission to perform this action.' ),
+				__( 'You do not have permission to perform this action.', 'rtc-table-testing' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -264,7 +264,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 					'rest_cannot_edit',
 					sprintf(
 						/* translators: %s: The room name identifying the collaborative editing session. */
-						__( 'You do not have permission to collaborate on this entity: %s.' ),
+						__( 'You do not have permission to collaborate on this entity: %s.', 'rtc-table-testing' ),
 						esc_html( $room )
 					),
 					array( 'status' => rest_authorization_required_code() )
@@ -290,7 +290,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 		if ( is_string( $body ) && strlen( $body ) > self::MAX_BODY_SIZE ) {
 			return new WP_Error(
 				'rest_collaboration_body_too_large',
-				__( 'Request body is too large.' ),
+				__( 'Request body is too large.', 'rtc-table-testing' ),
 				array( 'status' => 413 )
 			);
 		}
@@ -443,7 +443,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 			if ( $client_id === $entry['client_id'] && $wp_user_id !== $entry['user_id'] ) {
 				return new WP_Error(
 					'rest_cannot_edit',
-					__( 'Client ID is already in use by another user.' ),
+					__( 'Client ID is already in use by another user.', 'rtc-table-testing' ),
 					array( 'status' => rest_authorization_required_code() )
 				);
 			}
@@ -528,7 +528,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 						}
 						return new WP_Error(
 							'rest_collaboration_storage_error',
-							__( 'Failed to remove updates during compaction.' ),
+							__( 'Failed to remove updates during compaction.', 'rtc-table-testing' ),
 							$error_data
 						);
 					}
@@ -559,7 +559,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 
 		return new WP_Error(
 			'rest_invalid_update_type',
-			__( 'Invalid collaboration update type.' ),
+			__( 'Invalid collaboration update type.', 'rtc-table-testing' ),
 			array( 'status' => 400 )
 		);
 	}
@@ -590,7 +590,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 			}
 			return new WP_Error(
 				'rest_collaboration_storage_error',
-				__( 'Failed to store collaboration update.' ),
+				__( 'Failed to store collaboration update.', 'rtc-table-testing' ),
 				$data
 			);
 		}
