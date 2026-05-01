@@ -13,4 +13,80 @@ const PLUGIN_VERSION = '1.0.0';
  * Bootstrap the plugin.
  */
 function bootstrap() {
+	if (
+		! function_exists( 'wp_is_collaboration_enabled' ) ||
+		! wp_is_collaboration_enabled() ||
+		class_exists( 'WP_Collaboration_Table_Storage' ) ||
+		class_exists( 'WP_HTTP_Polling_Collaboration_Server' )
+	) {
+		// Noop the plugin.
+		return;
+	}
+
+	require_once __DIR__ . '/class-wp-collaboration-table-storage.php';
+	require_once __DIR__ . '/class-wp-http-polling-collaboration-server.php';
+
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_collaboration_endpoints' );
+
+	add_action( 'init', __NAMESPACE__ . '\\register_collaboration_table', 5 );
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\maybe_create_table', 5 );
+}
+
+/**
+ * Register the replacement REST API endpoints for collaboration.
+ *
+ * Run on the `rest_api_init` action.
+ */
+function register_collaboration_endpoints() {
+	$controller = new WP_HTTP_Polling_Collaboration_Server( new WP_Collaboration_Table_Storage() );
+	$controller->register_routes();
+}
+
+/**
+ * Define the collaboration table name on the $wpdb global.
+ *
+ * Runs on the `init, 5` action.
+ *
+ * @global \wpdb $wpdb WordPress database abstraction object.
+ */
+function register_collaboration_table() {
+	global $wpdb;
+	$wpdb->collaboration = $wpdb->prefix . 'collaboration';
+}
+
+/**
+ * Create the collaboration table if it doesn't already exist.
+ *
+ * Runs on the `rest_api_init, 5` action. Prior to default endpoint registration.
+ *
+ * @global \wpdb $wpdb WordPress database abstraction object.
+ */
+function maybe_create_table() {
+	global $wpdb;
+	$charset_collate = $wpdb->get_charset_collate();
+
+	/*
+	 * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
+	 * As of 4.2, however, we moved to utf8mb4, which uses 4 bytes per character. This means that an index which
+	 * used to have room for floor(767/3) = 255 characters, now only has room for floor(767/4) = 191 characters.
+	 */
+	$max_index_length = 191;
+
+	$schema = "CREATE TABLE $wpdb->collaboration (
+		collaboration_id bigint(20) unsigned NOT NULL auto_increment,
+		room varchar($max_index_length) NOT NULL default '',
+		type varchar(32) NOT NULL default '',
+		client_id varchar(32) NOT NULL default '',
+		user_id bigint(20) unsigned NOT NULL default '0',
+		data longtext NOT NULL,
+		date_gmt datetime NOT NULL default '0000-00-00 00:00:00',
+		PRIMARY KEY  (collaboration_id),
+		KEY type_client_id (type,client_id),
+		KEY room (room,collaboration_id),
+		KEY room_type_date (room,type,date_gmt),
+		KEY date_gmt (date_gmt)
+	) $charset_collate;\n";
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	dbDelta( $schema );
 }
