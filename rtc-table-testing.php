@@ -12,7 +12,7 @@
  * Description: RTC Table Testing
  * Version: 1.0.0
  * Requires at least: 7.0
- * Requires PHP: 8.0
+ * Requires PHP: 7.4
  * Author: Peter Wilson
  * Author URI: https://peterwilson.cc
  * License: GPLv2
