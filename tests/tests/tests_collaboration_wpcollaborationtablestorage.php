@@ -17,12 +17,23 @@ namespace PWCC\RtcTableTesting\Tests;
 use WP_UnitTestCase;
 use PWCC\RtcTableTesting\WP_Collaboration_Table_Storage;
 
+/**
+ * Test class from PR.
+ *
+ * @package PWCC\RtcTableTesting\Tests
+ */
 class Tests_Collaboration_WpCollaborationTableStorage extends WP_UnitTestCase {
 
+	/**
+	 * Create table before running tests.
+	 */
 	public static function wpSetupBeforeClass() {
 		\PWCC\RtcTableTesting\maybe_create_table();
 	}
 
+	/**
+	 * Set up.
+	 */
 	public function set_up() {
 		parent::set_up();
 		add_filter( 'pre_option_wp_collaboration_enabled', '__return_true' );
