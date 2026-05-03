@@ -13,6 +13,13 @@ const PLUGIN_VERSION = '1.0.0';
  * Bootstrap the plugin.
  */
 function bootstrap() {
+	// Always create the tables when the plugin is active.
+	add_action( 'init', __NAMESPACE__ . '\\register_collaboration_table', 5 );
+	add_action( 'rest_api_init', __NAMESPACE__ . '\\maybe_create_table', 5 );
+
+	// Create on new multisite instance.
+	add_action( 'wp_initialize_site', __NAMESPACE__ . '\\maybe_create_table' );
+
 	if (
 		! function_exists( 'wp_is_collaboration_enabled' ) ||
 		! wp_is_collaboration_enabled() ||
@@ -33,9 +40,6 @@ function bootstrap() {
 	}
 
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\register_collaboration_endpoints' );
-
-	add_action( 'init', __NAMESPACE__ . '\\register_collaboration_table', 5 );
-	add_action( 'rest_api_init', __NAMESPACE__ . '\\maybe_create_table', 5 );
 
 	add_action( 'wp_delete_old_collaboration_data', __NAMESPACE__ . '\\wp_delete_old_collaboration_data' );
 
