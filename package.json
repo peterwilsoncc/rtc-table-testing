@@ -1,0 +1,28 @@
+{
+  "name": "rtc-table-testing",
+  "version": "1.0.0",
+  "description": "Test the new table approaches for Real-time Collaboration in WordPress Core",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "env": "wp-env",
+    "env:start": "wp-env start",
+    "env:stop": "wp-env stop",
+    "env:clean": "wp-env clean all",
+    "env:destroy": "wp-env destroy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterwilsoncc/rtc-table-testing.git"
+  },
+  "author": "Peter Wilson",
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/peterwilsoncc/rtc-table-testing/issues"
+  },
+  "homepage": "https://github.com/peterwilsoncc/rtc-table-testing#readme",
+  "devDependencies": {
+    "@wordpress/env": "^11.5.0"
+  }
+}
