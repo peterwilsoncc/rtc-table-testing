@@ -13,9 +13,7 @@
 			<!-- exclude>./tests/class-test-sample.php</exclude -->
 		</testsuite>
 	</testsuites>
-	<groups>
-		<exclude>
-			<group>ms-required</group>
-		</exclude>
-	</groups>
+	<php>
+		<const name="WP_TESTS_MULTISITE" value="1"/>
+	</php>
 </phpunit>

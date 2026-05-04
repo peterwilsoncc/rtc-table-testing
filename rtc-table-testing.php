@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name: RTC Table Testing
  * Description: RTC Table Testing
- * Version: 1.0.0
+ * Version: 1.1.0
  * Requires at least: 7.0
  * Requires PHP: 7.4
  * Author: Peter Wilson
