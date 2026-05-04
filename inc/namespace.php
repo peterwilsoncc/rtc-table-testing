@@ -138,7 +138,17 @@ function filter_dbdelta_queries( $queries ) {
 		return $queries;
 	}
 
-	$queries[] = get_table_schema();
+	if ( ! doing_action( 'wp_initialize_site' ) && ! doing_action( 'populate_blog' ) ) {
+		return $queries;
+	}
+
+	$schema = get_table_schema();
+
+	if ( in_array( $schema, $queries, true ) ) {
+		return $queries;
+	}
+
+	$queries[] = $schema;
 	return $queries;
 }
 
