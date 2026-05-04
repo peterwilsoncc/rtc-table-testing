@@ -10,7 +10,8 @@
     "env:start": "wp-env start",
     "env:stop": "wp-env stop",
     "env:clean": "wp-env clean all",
-    "env:destroy": "wp-env destroy"
+    "env:destroy": "wp-env destroy",
+    "env:run": "wp-env run cli"
   },
   "repository": {
     "type": "git",
