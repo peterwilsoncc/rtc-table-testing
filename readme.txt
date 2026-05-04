@@ -2,7 +2,7 @@
 Contributors: peterwilsoncc
 Tags:
 Tested up to: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2
 License URI: https://github.com/peterwilsoncc/rtc-table-testing/blob/main/LICENSE
 
@@ -69,6 +69,11 @@ done;
 </code>
 
 == Changelog ==
+
+= 1.1.0 =
+
+* Added: Create new table when a new Multisite sub-site is created.
+* Developer: Add `@wordpress/env` for local development.
 
 = 1.0.0 =
 

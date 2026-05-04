@@ -62,6 +62,11 @@ done;
 
 ## Changelog
 
+### 1.1.0
+
+* Added: Create new table when a new Multisite sub-site is created.
+* Developer: Add `@wordpress/env` for local development.
+
 ### 1.0.0
 
 Initial release.
