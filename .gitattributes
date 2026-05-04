@@ -4,6 +4,7 @@
 /.editorconfig export-ignore
 /.wordpress-org/ export-ignore
 /.wordpress-version-checker.json export-ignore
+/.wp-env.json export-ignore
 /*.xml.dist export-ignore
 /package.json export-ignore
 /package-lock.json export-ignore
