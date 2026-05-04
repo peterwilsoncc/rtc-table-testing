@@ -1,15 +1,14 @@
 <?php
 /**
- * Tests for the WP_Collaboration_Table_Storage class.
+ * Tests for collaboration table creation.
  *
- * Covers the storage implementation contract: cache bypass, data integrity,
- * malformed data handling, and race-condition safety.
+ * Covers creation of the collaboration table during REST API initialization
+ * and when provisioning new sites in multisite.
  *
  * @package WordPress
  * @subpackage Collaboration
  *
  * @group collaboration
- * @group cache
  */
 
 namespace PWCC\RtcTableTesting\Tests;
