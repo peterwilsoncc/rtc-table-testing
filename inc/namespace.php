@@ -13,6 +13,14 @@ const PLUGIN_VERSION = '1.0.0';
  * Bootstrap the plugin.
  */
 function bootstrap() {
+	if (
+		class_exists( 'WP_Collaboration_Table_Storage' ) ||
+		class_exists( 'WP_HTTP_Polling_Collaboration_Server' )
+	) {
+		// Noop table creation, WP should handle it.
+		return;
+	}
+
 	// Always create the tables when the plugin is active.
 	add_action( 'init', __NAMESPACE__ . '\\register_collaboration_table', 5 );
 	add_action( 'rest_api_init', __NAMESPACE__ . '\\maybe_create_table', 5 );
@@ -25,11 +33,9 @@ function bootstrap() {
 
 	if (
 		! function_exists( 'wp_is_collaboration_enabled' ) ||
-		! wp_is_collaboration_enabled() ||
-		class_exists( 'WP_Collaboration_Table_Storage' ) ||
-		class_exists( 'WP_HTTP_Polling_Collaboration_Server' )
+		! wp_is_collaboration_enabled()
 	) {
-		// Noop the plugin.
+		// Noop the REST API configuration.
 		return;
 	}
 
