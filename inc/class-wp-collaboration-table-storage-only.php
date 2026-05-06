@@ -25,7 +25,7 @@ namespace PWCC\RtcTableTesting;
  *
  * @access private
  *
- * @phpstan-type AwarenessState array{client_id: string, state: array<string, mixed>, user_id: int, timestamp: int}
+ * @phpstan-type AwarenessState array{client_id: string, state: array<string, mixed>, user_id: int}
  */
 class WP_Collaboration_Table_Storage_Only {
 	/**
@@ -308,12 +308,26 @@ class WP_Collaboration_Table_Storage_Only {
 
 		$data = wp_json_encode( $state );
 
-		/*
-		 * Bucket the timestamp to 5-second intervals so most polls
-		 * short-circuit without a database write. Ceil is used instead
-		 * of floor to prevent the awareness timeout from being hit early.
+		/**
+		 * Filters granularity used for rounding up a client's awareness timestamp.
+		 *
+		 * Modifies the granularity used when recording the latest time a client updates their
+		 * awareness state. This allows implementations to increase or reduce the granularity
+		 * of awareness updates for the desired balance of real-time updates and server load.
+		 *
+		 * The default awareness granularity of 10 seconds limits the number of writes to the
+		 * database/object cache as the awareness state is only updated if the time has changed.
+		 *
+		 * @since 7.0.0
+		 *
+		 * @param int $granularity Granularity in seconds. Default 10.
 		 */
-		$now = gmdate( 'Y-m-d H:i:s', (int) ceil( time() / 5 ) * 5 );
+		$granularity = absint( apply_filters( 'wp_sync_awareness_timestamp_granularity', 10 ) );
+		if ( 0 === $granularity ) {
+			$granularity = 1;
+		}
+
+		$now = gmdate( 'Y-m-d H:i:s', (int) ceil( time() / $granularity ) * $granularity );
 
 		/* Check if a row already exists. */
 		$exists = $wpdb->get_row(
@@ -358,36 +372,12 @@ class WP_Collaboration_Table_Storage_Only {
 		}
 
 		/*
-		 * Update the cached entries in-place so the next reader in this
-		 * room gets a cache hit with fresh data. If the cache is cold,
-		 * skip — the next get_awareness_state() call will prime it.
+		 * Delete the cache so the next get_awareness_state() call re-reads
+		 * from the database. This keeps the cache-building logic in a single
+		 * location rather than duplicating it on the write path.
 		 */
 		$cache_key = 'awareness:' . str_replace( '/', ':', $room );
-		$cached    = wp_cache_get( $cache_key, 'collaboration' );
-
-		if ( false !== $cached ) {
-			$normalized_state = json_decode( $data, true );
-			$found            = false;
-
-			foreach ( $cached as $i => $entry ) {
-				if ( $client_id === $entry['client_id'] ) {
-					$cached[ $i ]['state']   = $normalized_state;
-					$cached[ $i ]['user_id'] = $user_id;
-					$found                   = true;
-					break;
-				}
-			}
-
-			if ( ! $found ) {
-				$cached[] = array(
-					'client_id' => $client_id,
-					'state'     => $normalized_state,
-					'user_id'   => $user_id,
-				);
-			}
-
-			wp_cache_set( $cache_key, $cached, 'collaboration', 30 );
-		}
+		wp_cache_delete( $cache_key, 'collaboration' );
 
 		return true;
 	}
