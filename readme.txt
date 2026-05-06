@@ -2,7 +2,7 @@
 Contributors: peterwilsoncc
 Tags:
 Tested up to: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2
 License URI: https://github.com/peterwilsoncc/rtc-table-testing/blob/main/LICENSE
 
@@ -69,6 +69,11 @@ done;
 </code>
 
 == Changelog ==
+
+= 1.2.0 =
+
+* Added: Use transient to prevent dbDelta() running on every `rest_api_init`
+* Update: Incorporate upstream changes to the three core classes (PRs and trunk).
 
 = 1.1.0 =
 

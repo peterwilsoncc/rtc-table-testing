@@ -62,6 +62,11 @@ done;
 
 ## Changelog
 
+### 1.2.0
+
+* Added: Use transient to prevent dbDelta() running on every `rest_api_init`
+* Update: Incorporate upstream changes to the three core classes (PRs and trunk).
+
 ### 1.1.0
 
 * Added: Create new table when a new Multisite sub-site is created.
