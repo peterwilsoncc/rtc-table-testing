@@ -167,7 +167,6 @@ class WP_HTTP_Polling_Collaboration_Server {
 			'room'      => array(
 				'required'  => true,
 				'type'      => 'string',
-
 				/*
 				 * Room names follow the pattern EntityKind/EntityName:ObjectID, where:
 				 * - EntityKind is a broad category of the entity, e.g. 'postType'.
@@ -537,10 +536,13 @@ class WP_HTTP_Polling_Collaboration_Server {
 				}
 
 				/*
-				 * Reaching this point means there's a newer compaction,
-				 * so we can silently ignore this one.
+				 * A newer compaction already advanced the cursor, but we
+				 * can not safely drop an update. The incoming bytes still encode
+				 * operations other clients may not have seen, so store them as a
+				 * regular update. Y.applyUpdateV2 merges state-as-update blobs
+				 * idempotently, so overlap with the existing compaction is safe.
 				 */
-				return true;
+				return $this->add_update( $room, $client_id, self::UPDATE_TYPE_UPDATE, $data );
 
 			case self::UPDATE_TYPE_SYNC_STEP1:
 			case self::UPDATE_TYPE_SYNC_STEP2:
@@ -619,7 +621,20 @@ class WP_HTTP_Polling_Collaboration_Server {
 	 * } Response data for this room.
 	 */
 	private function get_updates( string $room, string $client_id, int $cursor, bool $is_compactor ): array {
-		$updates_after_cursor = $this->storage->get_updates_after_cursor( $room, $cursor );
+		$updates_after_cursor = array_filter(
+			$this->storage->get_updates_after_cursor( $room, $cursor ),
+			static function ( $update ): bool {
+				return (
+					is_array( $update )
+					&&
+					isset( $update['client_id'], $update['type'], $update['data'] )
+					&&
+					is_string( $update['type'] )
+					&&
+					is_string( $update['data'] )
+				);
+			}
+		);
 		$total_updates        = $this->storage->get_update_count( $room );
 
 		// Filter out this client's updates, except compaction updates.
