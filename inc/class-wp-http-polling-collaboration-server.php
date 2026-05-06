@@ -167,6 +167,7 @@ class WP_HTTP_Polling_Collaboration_Server {
 			'room'      => array(
 				'required'  => true,
 				'type'      => 'string',
+
 				/*
 				 * Room names follow the pattern EntityKind/EntityName:ObjectID, where:
 				 * - EntityKind is a broad category of the entity, e.g. 'postType'.
