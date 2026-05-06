@@ -158,9 +158,13 @@ function filter_dbdelta_queries( $queries ) {
  * Runs on the `rest_api_init, 5` action. Prior to default endpoint registration.
  */
 function maybe_create_table() {
+	if ( get_transient( 'pwcc_rtc_table_created' ) ) {
+		return;
+	}
 	$schema = get_table_schema();
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $schema );
+	set_transient( 'pwcc_rtc_table_created', 1, DAY_IN_SECONDS );
 }
 
 /**
